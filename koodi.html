@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Awesome Website</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+    }
+
+    header {
+      background-color: #333;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+
+    nav {
+      background-color: #555;
+      color: #fff;
+      padding: 10px;
+    }
+
+    nav ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    nav ul li {
+      display: inline;
+    }
+
+    nav ul li a {
+      color: #fff;
+      padding: 10px;
+      text-decoration: none;
+    }
+
+    main {
+      padding: 20px;
+    }
+
+    footer {
+      background-color: #333;
+      color: #fff;
+      padding: 10px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Welcome to My Awesome Website!</h1>
+  </header>
+
+  <nav>
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Services</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <h2>About</h2>
+    <p>This is a demonstration website created for the coding class.</p>
+
+    <h2>Services</h2>
+    <ul>
+      <li>Web Design</li>
+      <li>Mobile App Development</li>
+      <li>Database Management</li>
+    </ul>
+
+    <h2>Contact</h2>
+    <p>You can reach us at contact@example.com or by phone at 123-456-7890.</p>
+  </main>
+
+  <footer>
+    <p>&copy; 2023 My Awesome Website. All rights reserved.</p>
+  </footer>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Guessing Game</title>
+  <style>
+    /* Add your styles here */
+  </style>
+  <script>
+    function startGame() {
+      var number = Math.floor(Math.random() * 100) + 1;
+      var guess;
+
+      while (guess !== number) {
+        guess = parseInt(prompt("Guess a number between 1 and 100:"));
+
+        if (guess < number) {
+          alert("Too low! Try again.");
+        } else if (guess > number) {
+          alert("Too high! Try again.");
+        } else {
+          alert("Congratulations! You guessed the correct number.");
+        }
+      }
+    }
+  </script>
+</head>
+<body>
+  <h1>Guessing Game</h1>
+  <button onclick="startGame()">Start Game</button>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Quiz Game</title>
+  <style>
+    /* Add your styles here */
+  </style>
+  <script>
+    var questions = [
+      {
+        question: "What is the capital of France?",
+        choices: ["Paris", "London", "Berlin", "Rome"],
+        correctAnswer: "Paris"
+      },
+      {
+        question: "What is the largest planet in our solar system?",
+        choices: ["Mars", "Jupiter", "Earth", "Saturn"],
+        correctAnswer: "Jupiter"
+      },
+      {
+        question: "What is the chemical symbol for gold?",
+        choices: ["Go", "Ag", "Au", "Ge"],
+        correctAnswer: "Au"
+      }
+    ];
+
+    var currentQuestion = 0;
+    var score = 0;
+
+    function startQuiz() {
+      var quizContainer = document.getElementById("quiz-container");
+
+      if (currentQuestion >= questions.length) {
+        quizContainer.innerHTML = "<h2>Quiz Complete</h2>" +
+                                  "<p>Your score: " + score + " out of " + questions.length + "</p>";
+      } else {
+        var questionObj = questions[currentQuestion];
+        var choicesHtml = "";
+
+        for (var i = 0; i < questionObj.choices.length; i++) {
+          choicesHtml += "<input type='radio' name='answer' value='" + questionObj.choices[i] + "'>" +
+                         "<label>" + questionObj.choices[i] + "</label><br>";
+        }
+
+        quizContainer.innerHTML = "<h2>Question " + (currentQuestion + 1) + "</h2>" +
+                                  "<p>" + questionObj.question + "</p>" +
+                                  "<form onsubmit='return checkAnswer()'>" +
+                                  choicesHtml +
+                                  "<button type='submit'>Next</button>" +
+                                  "</form>";
+      }
+    }
+
+    function checkAnswer() {
+      var selectedAnswer = document.querySelector("input[name='answer']:checked");
+
+      if (selectedAnswer && selectedAnswer.value === questions[currentQuestion].correctAnswer) {
+        score++;
+      }
+
+      currentQuestion++;
+      startQuiz();
+
+      return false;
+    }
+  </script>
+</head>
+<body>
+  <div id="quiz-container">
+    <h2>Welcome to the Quiz Game!</h2>
+    <button onclick="startQuiz()">Start Quiz</button>
+  </div>
+</body>
+</html>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Whack-a-Mole Game</title>
+  <style>
+    /* Add your styles here */
+    .game-container {
+      width: 400px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .hole {
+      width: 100px;
+      height: 100px;
+      background-color: brown;
+      border-radius: 50%;
+      display: inline-block;
+      margin: 10px;
+      position: relative;
+    }
+
+    .mole {
+      width: 80px;
+      height: 80px;
+      background-color: gray;
+      border-radius: 50%;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      display: none;
+    }
+
+    .mole.show {
+      display: block;
+    }
+  </style>
+  <script>
+    var score = 0;
+    var moleTimeout;
+
+    function startGame() {
+      score = 0;
+      document.getElementById("score").textContent = score;
+      showMole();
+    }
+
+    function showMole() {
+      var holes = document.getElementsByClassName("hole");
+      var randomHole = holes[Math.floor(Math.random() * holes.length)];
+      var mole = randomHole.querySelector(".mole");
+
+      mole.style.display = "block";
+      moleTimeout = setTimeout(function() {
+        mole.style.display = "none";
+        showMole();
+      }, Math.random() * 2000 + 500);
+    }
+
+    function whackMole() {
+      score++;
+      document.getElementById("score").textContent = score;
+
+      var mole = this.querySelector(".mole");
+      mole.style.display = "none";
+
+      clearTimeout(moleTimeout);
+      showMole();
+    }
+
+    window.addEventListener("load", function() {
+      var holes = document.getElementsByClassName("hole");
+
+      for (var i = 0; i < holes.length; i++) {
+        holes[i].addEventListener("click", whackMole);
+      }
+    });
+  </script>
+</head>
+<body>
+  <h1>Whack-a-Mole Game</h1>
+  <div class="game-container">
+    <div class="hole">
+      <div class="mole"></div>
+    </div>
+    <div class="hole">
+      <div class="mole"></div>
+    </div>
+    <div class="hole">
+      <div class="mole"></div>
+    </div>
+    <div class="hole">
+      <div class="mole"></div>
+    </div>
+    <div class="hole">
+      <div class="mole"></div>
+    </div>
+    <div class="hole">
+      <div class="mole"></div>
+    </div>
+  </div>
+  <button onclick="startGame()">Start Game</button>
+  <p>Score: <span id="score">0</span></p>
+</body>
+</html>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Connect the Dots</title>
+  <style>
+    /* Add your styles here */
+  </style>
+  <script>
+    var canvas;
+    var ctx;
+    var isDrawing = false;
+
+    function initialize() {
+      canvas = document.getElementById("myCanvas");
+      ctx = canvas.getContext("2d");
+
+      canvas.addEventListener("mousedown", startDrawing);
+      canvas.addEventListener("mousemove", draw);
+      canvas.addEventListener("mouseup", stopDrawing);
+    }
+
+    function startDrawing(event) {
+      isDrawing = true;
+      ctx.beginPath();
+      ctx.moveTo(event.offsetX, event.offsetY);
+    }
+
+    function draw(event) {
+      if (isDrawing) {
+        ctx.lineTo(event.offsetX, event.offsetY);
+        ctx.stroke();
+      }
+    }
+
+    function stopDrawing() {
+      isDrawing = false;
+    }
+  </script>
+</head>
+<body onload="initialize()">
+  <h1>Connect the Dots</h1>
+  <canvas id="myCanvas" width="400" height="400"></canvas>
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Connect the Dots</title>
+  <style>
+    /* Add your styles here */
+  </style>
+  <script>
+    var canvas;
+    var ctx;
+    var isDrawing = false;
+    var startTime;
+    var timerInterval;
+
+    function initialize() {
+      canvas = document.getElementById("myCanvas");
+      ctx = canvas.getContext("2d");
+
+      canvas.addEventListener("mousedown", startDrawing);
+      canvas.addEventListener("mousemove", draw);
+      canvas.addEventListener("mouseup", stopDrawing);
+
+      startTime = new Date().getTime();
+      timerInterval = setInterval(updateTimer, 1000);
+    }
+
+    function startDrawing(event) {
+      isDrawing = true;
+      ctx.beginPath();
+      ctx.moveTo(event.offsetX, event.offsetY);
+    }
+
+    function draw(event) {
+      if (isDrawing) {
+        ctx.lineTo(event.offsetX, event.offsetY);
+        ctx.stroke();
+      }
+    }
+
+    function stopDrawing() {
+      isDrawing = false;
+    }
+
+    function updateTimer() {
+      var currentTime = new Date().getTime();
+      var elapsedTime = Math.floor((currentTime - startTime) / 1000);
+
+      document.getElementById("timer").textContent = "Time: " + elapsedTime + "s";
+    }
+  </script>
+</head>
+<body onload="initialize()">
+  <h1>Connect the Dots</h1>
+  <canvas id="myCanvas" width="400" height="400"></canvas>
+  <p id="timer">Time: 0s</p>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Student Comments</title>
+  <style>
+    /* Add your styles here */
+  </style>
+</head>
+<body>
+  <h1>Student Comments</h1>
+
+  <form id="commentForm">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required><br><br>
+
+    <label for="comment">Comment:</label><br>
+    <textarea id="comment" name="comment" rows="4" cols="50" required></textarea><br><br>
+
+    <input type="submit" value="Submit">
+  </form>
+
+  <div id="comments"></div>
+
+  <script>
+    document.getElementById("commentForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      var name = document.getElementById("name").value;
+      var comment = document.getElementById("comment").value;
+
+      displayComment(name, comment);
+      clearForm();
+    });
+
+    function displayComment(name, comment) {
+      var commentContainer = document.createElement("div");
+      commentContainer.classList.add("comment");
+
+      var nameElement = document.createElement("h3");
+      nameElement.textContent = name;
+
+      var commentElement = document.createElement("p");
+      commentElement.textContent = comment;
+
+      commentContainer.appendChild(nameElement);
+      commentContainer.appendChild(commentElement);
+
+      document.getElementById("comments").appendChild(commentContainer);
+    }
+
+    function clearForm() {
+      document.getElementById("name").value = "";
+      document.getElementById("comment").value = "";
+    }
+  </script>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Word Guessing Game</title>
+  <style>
+    /* Add your styles here */
+  </style>
+  <script>
+    var words = ["apple", "banana", "chocolate", "elephant", "giraffe"]; // Array of words to guess
+    var currentWord; // Current word being guessed
+    var guessedLetters; // Array to store guessed letters
+    var remainingAttempts; // Number of attempts remaining
+    var score; // Player's score
+
+    function initialize() {
+      currentWord = getRandomWord();
+      guessedLetters = [];
+      remainingAttempts = 6;
+      score = 0;
+
+      updateDisplay();
+    }
+
+    function getRandomWord() {
+      var randomIndex = Math.floor(Math.random() * words.length);
+      return words[randomIndex];
+    }
+
+    function guessLetter() {
+      var letter = document.getElementById("letterInput").value.toLowerCase();
+
+      if (letter.length !== 1 || !letter.match(/[a-z]/i)) {
+        alert("Please enter a single letter.");
+        return;
+      }
+
+      if (guessedLetters.includes(letter)) {
+        alert("You already guessed that letter.");
+        return;
+      }
+
+      guessedLetters.push(letter);
+
+      if (currentWord.includes(letter)) {
+        updateScore(1);
+      } else {
+        remainingAttempts--;
+        if (remainingAttempts === 0) {
+          endGame();
+          return;
+        }
+      }
+
+      updateDisplay();
+
+      if (guessedLetters.length === currentWord.length) {
+        endGame();
+      }
+    }
+
+    function updateScore(points) {
+      score += points;
+    }
+
+    function updateDisplay() {
+      document.getElementById("score").textContent = "Score: " + score;
+      document.getElementById("remainingAttempts").textContent = "Remaining Attempts: " + remainingAttempts;
+
+      var wordDisplay = "";
+      for (var i = 0; i < currentWord.length; i++) {
+        var letter = currentWord[i];
+        if (guessedLetters.includes(letter)) {
+          wordDisplay += letter + " ";
+        } else {
+          wordDisplay += "_ ";
+        }
+      }
+      document.getElementById("word").textContent = wordDisplay;
+    }
+
+    function endGame() {
+      alert("Game over! The word was: " + currentWord);
+      initialize();
+    }
+  </script>
+</head>
+<body onload="initialize()">
+  <h1>Word Guessing Game</h1>
+
+  <p>Guess the word by entering one letter at a time:</p>
+  <input type="text" id="letterInput" maxlength="1">
+  <button onclick="guessLetter()">Guess</button>
+
+  <h2 id="word"></h2>
+  <p id="score"></p>
+  <p id="remainingAttempts"></p>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Hangman Game</title>
+  <style>
+    /* Add your styles here */
+  </style>
+  <script>
+    var words = ["apple", "banana", "chocolate", "elephant", "giraffe"]; // Array of words to guess
+    var currentWord; // Current word being guessed
+    var guessedLetters; // Array to store guessed letters
+    var remainingAttempts; // Number of attempts remaining
+    var score; // Player's score
+
+    function initialize() {
+      currentWord = getRandomWord();
+      guessedLetters = [];
+      remainingAttempts = 6;
+      score = 0;
+
+      updateDisplay();
+    }
+
+    function getRandomWord() {
+      var randomIndex = Math.floor(Math.random() * words.length);
+      return words[randomIndex];
+    }
+
+    function guessLetter() {
+      var letter = document.getElementById("letterInput").value.toLowerCase();
+
+      if (letter.length !== 1 || !letter.match(/[a-z]/i)) {
+        alert("Please enter a single letter.");
+        return;
+      }
+
+      if (guessedLetters.includes(letter)) {
+        alert("You already guessed that letter.");
+        return;
+      }
+
+      guessedLetters.push(letter);
+
+      if (currentWord.includes(letter)) {
+        updateScore(1);
+      } else {
+        remainingAttempts--;
+        if (remainingAttempts === 0) {
+          endGame();
+          return;
+        }
+      }
+
+      updateDisplay();
+
+      if (guessedLetters.length === currentWord.length) {
+        endGame();
+      }
+    }
+
+    function updateScore(points) {
+      score += points;
+    }
+
+    function updateDisplay() {
+      document.getElementById("score").textContent = "Score: " + score;
+      document.getElementById("remainingAttempts").textContent = "Remaining Attempts: " + remainingAttempts;
+
+      var wordDisplay = "";
+      for (var i = 0; i < currentWord.length; i++) {
+        var letter = currentWord[i];
+        if (guessedLetters.includes(letter)) {
+          wordDisplay += letter + " ";
+        } else {
+          wordDisplay += "_ ";
+        }
+      }
+      document.getElementById("word").textContent = wordDisplay;
+
+      updateHangman();
+    }
+
+    function updateHangman() {
+      var hangmanParts = document.querySelectorAll(".hangman-part");
+      for (var i = 0; i < hangmanParts.length; i++) {
+        hangmanParts[i].style.display = "none";
+      }
+
+      var incorrectGuesses = guessedLetters.filter(function(letter) {
+        return !currentWord.includes(letter);
+      });
+
+      for (var j = 0; j < incorrectGuesses.length; j++) {
+        var partIndex = j;
+        if (partIndex >= hangmanParts.length) {
+          break;
+        }
+        hangmanParts[partIndex].style.display = "block";
+      }
+    }
+
+    function endGame() {
+      var message;
+      if (guessedLetters.length === currentWord.length) {
+        message = "Congratulations! You guessed the word: " + currentWord;
+      } else {
+        message = "Game over! The word was: " + currentWord;
+      }
+      alert(message);
+      initialize();
+    }
+  </script>
+</head>
+<body onload="initialize()">
+  <h1>Hangman Game</h1>
+
+  <p>Guess the word by entering one letter at a time:</p>
+  <input type="text" id="letterInput" maxlength="1">
+  <button onclick="guessLetter()">Guess</button>
+
+  <h2 id="word"></h2>
+  <p id="score"></p>
+  <p id="remainingAttempts"></p>
+
+  <div id="hangman">
+    <div class="hangman-part"></div>
+    <div class="hangman-part"></div>
+    <div class="hangman-part"></div>
+    <div class="hangman-part"></div>
+    <div class="hangman-part"></div>
+    <div class="hangman-part"></div>
+  </div>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Hangman Game</title>
+  <style>
+    /* Add your styles here */
+    .hangman-part {
+      width: 50px;
+      height: 50px;
+      background-color: #000;
+      margin: 5px;
+      display: none;
+    }
+  </style>
+  <script>
+    var words = ["apple", "banana", "chocolate", "elephant", "giraffe"]; // Array of words to guess
+    var currentWord; // Current word being guessed
+    var guessedLetters; // Array to store guessed letters
+    var remainingAttempts; // Number of attempts remaining
+    var score; // Player's score
+
+    function initialize() {
+      currentWord = getRandomWord();
+      guessedLetters = [];
+      remainingAttempts = 6;
+      score = 0;
+
+      updateDisplay();
+    }
+
+    function getRandomWord() {
+      var randomIndex = Math.floor(Math.random() * words.length);
+      return words[randomIndex];
+    }
+
+    function guessLetter() {
+      var letter = document.getElementById("letterInput").value.toLowerCase();
+
+      if (letter.length !== 1 || !letter.match(/[a-z]/i)) {
+        alert("Please enter a single letter.");
+        return;
+      }
+
+      if (guessedLetters.includes(letter)) {
+        alert("You already guessed that letter.");
+        return;
+      }
+
+      guessedLetters.push(letter);
+
+      if (currentWord.includes(letter)) {
+        updateScore(1);
+      } else {
+        remainingAttempts--;
+        if (remainingAttempts === 0) {
+          endGame();
+          return;
+        }
+      }
+
+      updateDisplay();
+
+      if (guessedLetters.length === currentWord.length) {
+        endGame();
+      }
+    }
+
+    function updateScore(points) {
+      score += points;
+    }
+
+    function updateDisplay() {
+      document.getElementById("score").textContent = "Score: " + score;
+      document.getElementById("remainingAttempts").textContent = "Remaining Attempts: " + remainingAttempts;
+
+      var wordDisplay = "";
+      for (var i = 0; i < currentWord.length; i++) {
+        var letter = currentWord[i];
+        if (guessedLetters.includes(letter)) {
+          wordDisplay += letter + " ";
+        } else {
+          wordDisplay += "_ ";
+        }
+      }
+      document.getElementById("word").textContent = wordDisplay;
+
+      updateHangman();
+    }
+
+    function updateHangman() {
+      var hangmanParts = document.querySelectorAll(".hangman-part");
+      for (var i = 0; i < hangmanParts.length; i++) {
+        hangmanParts[i].style.display = "none";
+      }
+
+      var incorrectGuesses = guessedLetters.filter(function(letter) {
+        return !currentWord.includes(letter);
+      });
+
+      for (var j = 0; j < incorrectGuesses.length; j++) {
+        var partIndex = j;
+        if (partIndex >= hangmanParts.length) {
+          break;
+        }
+        hangmanParts[partIndex].style.display = "block";
+      }
+    }
+
+    function endGame() {
+      var message;
+      if (guessedLetters.length === currentWord.length) {
+        message = "Congratulations! You guessed the word: " + currentWord;
+      } else {
+        message = "Game over! The word was: " + currentWord;
+      }
+      alert(message);
+      initialize();
+    }
+  </script>
+</head>
+<body onload="initialize()">
+  <h1>Hangman Game</h1>
+
+  <p>Guess the word by entering one letter at a time:</p>
+  <input type="text" id="letterInput" maxlength="1">
+  <button onclick="guessLetter()">Guess</button>
+
+  <h2 id="word"></h2>
+  <p id="score"></p>
+  <p id="remainingAttempts"></p>
+
+  <div id="hangman">
+    <div class="hangman-part"></div>
+    <div class="hangman-part"></div>
+    <div class="hangman-part"></div>
+    <div class="hangman-part"></div>
+    <div class="hangman-part"></div>
+    <div class="hangman-part"></div>
+  </div>
+
+  <script>
+    var hangmanParts = document.querySelectorAll(".hangman-part");
+    for (var i = 0; i < hangmanParts.length; i++) {
+      hangmanParts[i].style.display = "block";
+    }
+  </script>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Hangman Game</title>
+  <style>
+    #hangman {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+    .hangman-part {
+      display: none;
+      width: 100px;
+      height: 20px;
+      background-color: black;
+      margin-bottom: 10px;
+    }
+  </style>
+  <script>
+    var words = ["apple", "banana", "chocolate", "elephant", "giraffe"]; // Array of words to guess
+    var currentWord; // Current word being guessed
+    var guessedLetters; // Array to store guessed letters
+    var remainingAttempts; // Number of attempts remaining
+    var score; // Player's score
+
+    function initialize() {
+      currentWord = getRandomWord();
+      guessedLetters = [];
+      remainingAttempts = 6;
+      score = 0;
+
+      updateDisplay();
+    }
+
+    function getRandomWord() {
+      var randomIndex = Math.floor(Math.random() * words.length);
+      return words[randomIndex];
+    }
+
+    function guessLetter() {
+      var letter = document.getElementById("letterInput").value.toLowerCase();
+
+      if (letter.length !== 1 || !letter.match(/[a-z]/i)) {
+        alert("Please enter a single letter.");
+        return;
+      }
+
+      if (guessedLetters.includes(letter)) {
+        alert("You already guessed that letter.");
+        return;
+      }
+
+      guessedLetters.push(letter);
+
+      if (currentWord.includes(letter)) {
+        updateScore(1);
+      } else {
+        remainingAttempts--;
+        if (remainingAttempts === 0) {
+          endGame();
+          return;
+        }
+      }
+
+      updateDisplay();
+
+      if (guessedLetters.length === currentWord.length) {
+        endGame();
+      }
+    }
+
+    function updateScore(points) {
+      score += points;
+    }
+
+    function updateDisplay() {
+      document.getElementById("score").textContent = "Score: " + score;
+      document.getElementById("remainingAttempts").textContent = "Remaining Attempts: " + remainingAttempts;
+
+      var wordDisplay = "";
+      for (var i = 0; i < currentWord.length; i++) {
+        var letter = currentWord[i];
+        if (guessedLetters.includes(letter)) {
+          wordDisplay += letter + " ";
+        } else {
+          wordDisplay += "_ ";
+        }
+      }
+      document.getElementById("word").textContent = wordDisplay;
+
+      updateHangman();
+    }
+
+    function updateHangman() {
+      var hangmanParts = document.querySelectorAll(".hangman-part");
+      for (var i = 0; i < hangmanParts.length; i++) {
+        hangmanParts[i].style.display = "none";
+      }
+
+      var incorrectGuesses = guessedLetters.filter(function(letter) {
+        return !currentWord.includes(letter);
+      });
+
+      for (var j = 0; j < incorrectGuesses.length; j++) {
+        var partIndex = j;
+        if (partIndex >= hangmanParts.length) {
+          break;
+        }
+        hangmanParts[partIndex].style.display = "block";
+      }
+    }
+
+    function endGame() {
+      var message;
+      if (guessedLetters.length === currentWord.length) {
+        message = "Congratulations! You guessed the word: " + currentWord;
+      } else {
+        message = "Game over! The word was: " + currentWord;
